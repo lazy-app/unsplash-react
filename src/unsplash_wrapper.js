@@ -26,9 +26,9 @@ class ChaosMonkey {
 }
 
 export default class UnsplashWrapper {
-  constructor({ accessKey, __debug_chaosMonkey = false }) {
+  constructor({ unsplashKey, __debug_chaosMonkey = false }) {
     this.__debug_chaosMonkey = new ChaosMonkey(__debug_chaosMonkey);
-    this.unsplash = new Unsplash({ accessKey: accessKey });
+    this.unsplash = new Unsplash({ accessKey: unsplashKey });
   }
 
   listPhotos = (page, perPage, type = "popular") => {
