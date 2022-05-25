@@ -1,9 +1,15 @@
 {
   "name": "@castrocrea/unsplash-react",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/unsplash-react.esm.js",
+      "require": "./dist/index.js"
+    }
+  },
   "files": [
     "dist",
     "src"
