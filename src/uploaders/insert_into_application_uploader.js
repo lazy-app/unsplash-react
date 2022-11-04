@@ -1,5 +1,5 @@
-import React from "react";
-import propTypes from "prop-types";
+import React from 'react';
+import propTypes from 'prop-types';
 const { shape, string, func } = propTypes;
 
 export default class InsertIntoApplicationUploader extends React.Component {
@@ -8,11 +8,11 @@ export default class InsertIntoApplicationUploader extends React.Component {
       id: string.isRequired,
       links: shape({
         download: string.isRequired,
-        download_location: string.isRequired
-      }).isRequired
+        download_location: string.isRequired,
+      }).isRequired,
     }),
     downloadPhoto: func.isRequired,
-    onFinishedUploading: func.isRequired
+    onFinishedUploading: func.isRequired,
   };
 
   componentWillReceiveProps(nextProps) {

@@ -1,8 +1,8 @@
-import React from "react";
-import propTypes from "prop-types";
+import React from 'react';
+import propTypes from 'prop-types';
 const { string, object } = propTypes;
 
-const blank = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+const blank = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
 export default class SpinnerImg extends React.Component {
   static propTypes = {
@@ -47,11 +47,11 @@ export default class SpinnerImg extends React.Component {
           <div
             className="p-a"
             style={{
-              width: "40px",
-              height: "40px",
-              top: "50%",
-              left: "50%",
-              margin: "-20px 0 0 -20px",
+              width: '40px',
+              height: '40px',
+              top: '50%',
+              left: '50%',
+              margin: '-20px 0 0 -20px',
             }}
           >
             <svg

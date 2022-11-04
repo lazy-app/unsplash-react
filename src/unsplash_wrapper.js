@@ -1,5 +1,5 @@
-import Unsplash from "unsplash-js";
-import { toJson } from "./utils";
+import Unsplash from 'unsplash-js';
+import { toJson } from './utils';
 
 class ChaosMonkey {
   constructor(shouldDoAnything) {
@@ -12,15 +12,15 @@ class ChaosMonkey {
 
   failResponse(_response) {
     const errors = [
-      [400, "bad request"],
-      [503, "gateway timeout"],
-      [500, "server error"],
-      [401, "not authorized"]
+      [400, 'bad request'],
+      [503, 'gateway timeout'],
+      [500, 'server error'],
+      [401, 'not authorized'],
     ];
     const error = errors[Math.round(Math.random() * (errors.length - 1))];
     return new Response(JSON.stringify({}), {
       status: error[0],
-      statusText: error[1]
+      statusText: error[1],
     });
   }
 }
@@ -31,7 +31,7 @@ export default class UnsplashWrapper {
     this.unsplash = new Unsplash({ accessKey: unsplashKey });
   }
 
-  listPhotos = (page, perPage, type = "popular") => {
+  listPhotos = (page, perPage, type = 'popular') => {
     return this.unsplash.photos
       .listPhotos(page, perPage, type)
       .then(this.processResponse);

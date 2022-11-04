@@ -1,34 +1,34 @@
-import React from "react";
-import UnsplashWrapper from "./unsplash_wrapper";
-import propTypes from "prop-types";
-import SearchIcon from "./search_icon";
-import ErrorImage from "./error_image";
-import SpinnerImg from "./spinner_img";
-import ReactIntersectionObserver from "./react_intersection_observer";
-import "intersection-observer";
-import { debounce, throttle, withDefaultProps } from "./utils";
+import React from 'react';
+import UnsplashWrapper from './unsplash_wrapper';
+import propTypes from 'prop-types';
+import SearchIcon from './search_icon';
+import ErrorImage from './error_image';
+import SpinnerImg from './spinner_img';
+import ReactIntersectionObserver from './react_intersection_observer';
+import 'intersection-observer';
+import { debounce, throttle, withDefaultProps } from './utils';
+
+import BlobUploader from './uploaders/blob_uploader';
+import DataTransferUploader from './uploaders/data_transfer_uploader';
+import Base64Uploader from './uploaders/base64_uploader';
+import ExternalLocationUploader from './uploaders/external_location_uploader';
+import InsertIntoApplicationUploader from './uploaders/insert_into_application_uploader';
 const { string, func, number, bool, object, shape, any } = propTypes;
 
-import BlobUploader from "./uploaders/blob_uploader";
-import DataTransferUploader from "./uploaders/data_transfer_uploader";
-import Base64Uploader from "./uploaders/base64_uploader";
-import ExternalLocationUploader from "./uploaders/external_location_uploader";
-import InsertIntoApplicationUploader from "./uploaders/insert_into_application_uploader";
-
-function noop() { }
+function noop() {}
 
 const inputNoAppearanceStyle = {
-  border: "none",
+  border: 'none',
   padding: 0,
   margin: 0,
-  backgroundColor: "transparent",
-  boxShadow: "none",
-  fontSize: "1em",
-  outline: "none",
+  backgroundColor: 'transparent',
+  boxShadow: 'none',
+  fontSize: '1em',
+  outline: 'none',
 };
 
-const inputGray = "#AAA";
-const inputDarkGray = "#555";
+const inputGray = '#AAA';
+const inputDarkGray = '#555';
 const borderRadius = 3;
 
 export default class UnsplashPicker extends React.Component {
@@ -51,8 +51,8 @@ export default class UnsplashPicker extends React.Component {
 
   static defaultProps = {
     columns: 3,
-    defaultSearch: "",
-    highlightColor: "#00adf0",
+    defaultSearch: '',
+    highlightColor: '#00adf0',
     onFinishedUploading: noop,
     photoRatio: 1.5,
     preferredSize: null,
@@ -89,7 +89,7 @@ export default class UnsplashPicker extends React.Component {
 
     this.recalculateSearchResultsWidth();
 
-    window.addEventListener("resize", this.recalculateSearchResultsWidth);
+    window.addEventListener('resize', this.recalculateSearchResultsWidth);
   }
 
   componentDidUpdate(_prevProps, prevState) {
@@ -105,7 +105,7 @@ export default class UnsplashPicker extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.recalculateSearchResultsWidth);
+    window.removeEventListener('resize', this.recalculateSearchResultsWidth);
   }
 
   didFinishLoadingNewSearchResults() {
@@ -122,9 +122,9 @@ export default class UnsplashPicker extends React.Component {
     const page = append ? this.state.page : 1;
     this.state.unsplash
       .listPhotos(page, this.resultsPerPage)
-      .then((photos) =>
+      .then(photos =>
         this.setState(
-          (prevState) => ({
+          prevState => ({
             photos: append ? prevState.photos.concat(photos) : photos,
             isLoadingSearch: false,
             totalPhotosCount: null,
@@ -134,12 +134,10 @@ export default class UnsplashPicker extends React.Component {
           append ? noop : this.didFinishLoadingNewSearchResults
         )
       )
-      .catch((e) =>
-        this.setState({ error: e.message, isLoadingSearch: false })
-      );
+      .catch(e => this.setState({ error: e.message, isLoadingSearch: false }));
   };
 
-  utmLink = (url) => {
+  utmLink = url => {
     const { applicationName } = this.props;
     const utmParams = `utm_source=${applicationName}&utm_medium=referral`;
     return `${url}?${utmParams}`;
@@ -156,9 +154,9 @@ export default class UnsplashPicker extends React.Component {
 
     return unsplash
       .searchPhotos(search, this.state.page, this.resultsPerPage)
-      .then((response) =>
+      .then(response =>
         this.setState(
-          (prevState) => ({
+          prevState => ({
             totalPhotosCount: response.total,
             photos: append
               ? prevState.photos.concat(response.results)
@@ -170,9 +168,7 @@ export default class UnsplashPicker extends React.Component {
           append ? noop : this.didFinishLoadingNewSearchResults
         )
       )
-      .catch((e) =>
-        this.setState({ error: e.message, isLoadingSearch: false })
-      );
+      .catch(e => this.setState({ error: e.message, isLoadingSearch: false }));
   };
 
   doDebouncedSearch = debounce(400, this.doImmediateSearch);
@@ -187,25 +183,23 @@ export default class UnsplashPicker extends React.Component {
     }
   };
 
-  downloadPhoto = (photo) => {
+  downloadPhoto = photo => {
     this.setState({ loadingPhoto: photo });
     const { preferredSize } = this.props;
     const download = this.state.unsplash.downloadPhoto(photo);
 
     const downloadPromise = preferredSize
       ? this.state.unsplash
-        .getPhoto(photo.id, preferredSize)
-        .then((r) => r.urls.custom)
-      : download.then((r) => r.url);
+          .getPhoto(photo.id, preferredSize)
+          .then(r => r.urls.custom)
+      : download.then(r => r.url);
 
     return downloadPromise
       .then(fetch)
-      .catch((e) =>
-        this.setState({ error: e.message, isLoadingSearch: false })
-      );
+      .catch(e => this.setState({ error: e.message, isLoadingSearch: false }));
   };
 
-  handleSearchChange = (e) => {
+  handleSearchChange = e => {
     this.setState({ search: e.target.value });
   };
 
@@ -213,16 +207,16 @@ export default class UnsplashPicker extends React.Component {
     this.searchInput && this.searchInput.focus();
   };
 
-  handlePhotoClick = (photo) => {
+  handlePhotoClick = photo => {
     this.setState({ selectedPhoto: photo });
   };
 
-  handleFinishedUploading = (response) => {
+  handleFinishedUploading = response => {
     this.setState({ loadingPhoto: null });
     this.props.onFinishedUploading(response);
   };
 
-  handleSearchResultsBottomIntersectionChange = (isAtBottomOfSearchResults) => {
+  handleSearchResultsBottomIntersectionChange = isAtBottomOfSearchResults => {
     this.setState({ isAtBottomOfSearchResults });
 
     if (
@@ -235,7 +229,7 @@ export default class UnsplashPicker extends React.Component {
   };
 
   get shouldShowDefault() {
-    return this.state.search === "";
+    return this.state.search === '';
   }
 
   get resultsPerPage() {
@@ -278,7 +272,7 @@ export default class UnsplashPicker extends React.Component {
     return (
       <ReactIntersectionObserver
         onIntersectionChange={this.recalculateSearchResultsWidth}
-        style={{ flexDirection: "column" }}
+        style={{ flexDirection: 'column' }}
         className="unsplash-react d-f h-f p-0"
       >
         <CSSStyles />
@@ -287,12 +281,12 @@ export default class UnsplashPicker extends React.Component {
             style={{
               color: inputGray,
               fontSize: 12,
-              textAlign: "center",
-              display: "flex",
-              justifyContent: "space-between",
-              height: "34px",
-              alignItems: "center",
-              padding: "0 6px",
+              textAlign: 'center',
+              display: 'flex',
+              justifyContent: 'space-between',
+              height: '34px',
+              alignItems: 'center',
+              padding: '0 6px',
             }}
           >
             {actionBar}
@@ -301,19 +295,19 @@ export default class UnsplashPicker extends React.Component {
         <div
           className="d-f"
           style={{
-            padding: ".5em",
+            padding: '.5em',
             border: `1px solid #DFDFDF`,
-            cursor: "text",
-            borderRadius: "3px",
+            cursor: 'text',
+            borderRadius: '3px',
             fontSize: 13,
-            margin: "0 6px",
+            margin: '0 6px',
           }}
           onClick={this.handleSearchWrapperClick}
         >
           <SearchInputIcon
             isLoading={isLoadingSearch}
             hasError={!!error}
-            style={{ marginRight: ".5em" }}
+            style={{ marginRight: '.5em' }}
           />
           <input
             type="text"
@@ -322,7 +316,7 @@ export default class UnsplashPicker extends React.Component {
             onChange={this.handleSearchChange}
             style={inputNoAppearanceStyle}
             className="f-1"
-            ref={(input) => (this.searchInput = input)}
+            ref={input => (this.searchInput = input)}
           />
           {totalPhotosCount !== null && (
             <span style={{ color: inputDarkGray }}>
@@ -331,18 +325,18 @@ export default class UnsplashPicker extends React.Component {
           )}
         </div>
 
-        <div className="p-r f-1 border-radius" style={{ overflow: "hidden" }}>
+        <div className="p-r f-1 border-radius" style={{ overflow: 'hidden' }}>
           <div
             className="h-f"
-            style={{ overflowY: "scroll" }}
-            ref={(element) => (this.searchResults = element)}
+            style={{ overflowY: 'scroll' }}
+            ref={element => (this.searchResults = element)}
           >
             {error ? (
               <div
                 style={{
-                  textAlign: "center",
-                  marginTop: "3em",
-                  padding: "0 1em",
+                  textAlign: 'center',
+                  marginTop: '3em',
+                  padding: '0 1em',
                   fontSize: 13,
                 }}
               >
@@ -354,97 +348,97 @@ export default class UnsplashPicker extends React.Component {
                 <p style={{ color: inputGray }}>{error}</p>
               </div>
             ) : (
-                [
-                  photos.map((photo, index) => (
-                    <Photo
-                      key={photo.id}
-                      photo={photo}
-                      index={index}
-                      width={searchResultWidth}
-                      height={searchResultHeight}
-                      columns={searchResultColumns}
-                      loadingPhoto={loadingPhoto}
-                      selectedPhoto={selectedPhoto}
-                      onPhotoClick={this.handlePhotoClick}
-                      highlightColor={highlightColor}
-                      utmLink={this.utmLink}
-                    />
-                  )),
+              [
+                photos.map((photo, index) => (
+                  <Photo
+                    key={photo.id}
+                    photo={photo}
+                    index={index}
+                    width={searchResultWidth}
+                    height={searchResultHeight}
+                    columns={searchResultColumns}
+                    loadingPhoto={loadingPhoto}
+                    selectedPhoto={selectedPhoto}
+                    onPhotoClick={this.handlePhotoClick}
+                    highlightColor={highlightColor}
+                    utmLink={this.utmLink}
+                  />
+                )),
 
-                  this.searchResults && (
-                    <ReactIntersectionObserver
-                      key="intersectionObserver"
-                      root={this.searchResults}
-                      onIntersectionChange={
-                        this.handleSearchResultsBottomIntersectionChange
-                      }
-                      style={{
-                        width: "100%",
-                        textAlign: "center",
-                        marginTop: this.hasMoreResults ? "2em" : ".5em",
-                        height: this.hasMoreResults ? 50 : 1,
-                      }}
-                    >
-                      {this.hasMoreResults && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="44"
-                          height="44"
-                          viewBox="0 0 44 44"
-                          stroke="#fff"
-                        >
-                          <g fill="none" fillRule="evenodd" strokeWidth="2">
-                            <circle cx="22" cy="22" r="14.2114">
-                              <animate
-                                attributeName="r"
-                                begin="0s"
-                                dur="1.8s"
-                                values="1; 20"
-                                calcMode="spline"
-                                keyTimes="0; 1"
-                                keySplines="0.165, 0.84, 0.44, 1"
-                                repeatCount="indefinite"
-                              />
-                              <animate
-                                attributeName="stroke-opacity"
-                                begin="0s"
-                                dur="1.8s"
-                                values="1; 0"
-                                calcMode="spline"
-                                keyTimes="0; 1"
-                                keySplines="0.3, 0.61, 0.355, 1"
-                                repeatCount="indefinite"
-                              />
-                            </circle>
-                            <circle cx="22" cy="22" r="19.7145">
-                              <animate
-                                attributeName="r"
-                                begin="-0.9s"
-                                dur="1.8s"
-                                values="1; 20"
-                                calcMode="spline"
-                                keyTimes="0; 1"
-                                keySplines="0.165, 0.84, 0.44, 1"
-                                repeatCount="indefinite"
-                              />
-                              <animate
-                                attributeName="stroke-opacity"
-                                begin="-0.9s"
-                                dur="1.8s"
-                                values="1; 0"
-                                calcMode="spline"
-                                keyTimes="0; 1"
-                                keySplines="0.3, 0.61, 0.355, 1"
-                                repeatCount="indefinite"
-                              />
-                            </circle>
-                          </g>
-                        </svg>
-                      )}
-                    </ReactIntersectionObserver>
-                  ),
-                ]
-              )}
+                this.searchResults && (
+                  <ReactIntersectionObserver
+                    key="intersectionObserver"
+                    root={this.searchResults}
+                    onIntersectionChange={
+                      this.handleSearchResultsBottomIntersectionChange
+                    }
+                    style={{
+                      width: '100%',
+                      textAlign: 'center',
+                      marginTop: this.hasMoreResults ? '2em' : '.5em',
+                      height: this.hasMoreResults ? 50 : 1,
+                    }}
+                  >
+                    {this.hasMoreResults && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="44"
+                        height="44"
+                        viewBox="0 0 44 44"
+                        stroke="#fff"
+                      >
+                        <g fill="none" fillRule="evenodd" strokeWidth="2">
+                          <circle cx="22" cy="22" r="14.2114">
+                            <animate
+                              attributeName="r"
+                              begin="0s"
+                              dur="1.8s"
+                              values="1; 20"
+                              calcMode="spline"
+                              keyTimes="0; 1"
+                              keySplines="0.165, 0.84, 0.44, 1"
+                              repeatCount="indefinite"
+                            />
+                            <animate
+                              attributeName="stroke-opacity"
+                              begin="0s"
+                              dur="1.8s"
+                              values="1; 0"
+                              calcMode="spline"
+                              keyTimes="0; 1"
+                              keySplines="0.3, 0.61, 0.355, 1"
+                              repeatCount="indefinite"
+                            />
+                          </circle>
+                          <circle cx="22" cy="22" r="19.7145">
+                            <animate
+                              attributeName="r"
+                              begin="-0.9s"
+                              dur="1.8s"
+                              values="1; 20"
+                              calcMode="spline"
+                              keyTimes="0; 1"
+                              keySplines="0.165, 0.84, 0.44, 1"
+                              repeatCount="indefinite"
+                            />
+                            <animate
+                              attributeName="stroke-opacity"
+                              begin="-0.9s"
+                              dur="1.8s"
+                              values="1; 0"
+                              calcMode="spline"
+                              keyTimes="0; 1"
+                              keySplines="0.3, 0.61, 0.355, 1"
+                              repeatCount="indefinite"
+                            />
+                          </circle>
+                        </g>
+                      </svg>
+                    )}
+                  </ReactIntersectionObserver>
+                ),
+              ]
+            )}
           </div>
         </div>
 
@@ -516,8 +510,8 @@ SearchInputIcon.propTypes = {
   style: object,
 };
 function SearchInputIcon({ isLoading, hasError, style, ...rest }) {
-  const searchColor = hasError ? "#D62828" : inputGray;
-  const mergedStyle = { top: "0.15em", marginRight: ".5em", ...style };
+  const searchColor = hasError ? '#D62828' : inputGray;
+  const mergedStyle = { top: '0.15em', marginRight: '.5em', ...style };
   return (
     <div className="p-r" style={mergedStyle} {...rest}>
       {isLoading ? (
@@ -576,8 +570,8 @@ function SearchInputIcon({ isLoading, hasError, style, ...rest }) {
           </g>
         </svg>
       ) : (
-          <SearchIcon width="1em" height="1em" style={{ color: searchColor }} />
-        )}
+        <SearchIcon width="1em" height="1em" style={{ color: searchColor }} />
+      )}
     </div>
   );
 }
@@ -593,8 +587,8 @@ function AbsolutelyCentered({ width, height, ...rest }) {
       style={{
         width,
         height,
-        top: "50%",
-        left: "50%",
+        top: '50%',
+        left: '50%',
         margin: `-${height / 2}px 0 0 -${width / 2}px`,
       }}
       {...rest}
@@ -612,18 +606,18 @@ function OverflowFadeLink({ wrapperClassName, style = {}, ...rest }) {
     <div
       className={`p-r ${wrapperClassName}`}
       style={{
-        display: "block",
-        overflow: "hidden",
-        maxWidth: "100%",
+        display: 'block',
+        overflow: 'hidden',
+        maxWidth: '100%',
       }}
     >
       <a
         style={{
           ...style,
-          display: "block",
-          whiteSpace: "nowrap",
-          maxWidth: "100%",
-          textDecoration: "underline",
+          display: 'block',
+          whiteSpace: 'nowrap',
+          maxWidth: '100%',
+          textDecoration: 'underline',
           fontSize: 13,
         }}
         {...rest}
@@ -684,39 +678,39 @@ function Photo({
   return (
     <div
       style={{
-        display: "inline-block",
+        display: 'inline-block',
         width,
         marginTop: 0,
         marginBottom: 12,
         marginLeft: 0,
         marginRight: 0,
-        paddingTop: ".5em",
-        paddingLeft: isFarLeft || ".5em",
+        paddingTop: '.5em',
+        paddingLeft: isFarLeft || '.5em',
       }}
       className="p-0"
     >
       <div
         className="p-r border-radius"
         style={{
-          overflow: "hidden",
-          transition: "box-shadow .3s",
-          cursor: "pointer",
-          width: "100%",
+          overflow: 'hidden',
+          transition: 'box-shadow .3s',
+          cursor: 'pointer',
+          width: '100%',
         }}
         onClick={onClick}
       >
         <SpinnerImg
           src={photo.urls.small}
           style={{
-            display: "block",
-            width: "100%",
+            display: 'block',
+            width: '100%',
             height,
-            objectFit: "cover",
+            objectFit: 'cover',
             borderWidth,
-            borderStyle: "solid",
-            borderColor: isSelectedAndLoaded ? highlightColor : "transparent",
+            borderStyle: 'solid',
+            borderColor: isSelectedAndLoaded ? highlightColor : 'transparent',
             borderRadius: borderRadius + borderWidth,
-            transition: "border .3s",
+            transition: 'border .3s',
           }}
         />
 
@@ -728,8 +722,8 @@ function Photo({
               top: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: "rgba(255,255,255,0.5)",
-              animation: "unsplash-react-fadein .1s",
+              backgroundColor: 'rgba(255,255,255,0.5)',
+              animation: 'unsplash-react-fadein .1s',
             }}
           >
             <AbsolutelyCentered height={40} width={40}>

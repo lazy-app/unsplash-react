@@ -1,5 +1,5 @@
-import React from "react";
-import propTypes from "prop-types";
+import React from 'react';
+import propTypes from 'prop-types';
 const { string, func, shape } = propTypes;
 
 export default class DataTransferUploader extends React.Component {
@@ -8,10 +8,10 @@ export default class DataTransferUploader extends React.Component {
       id: string.isRequired,
       links: shape({
         download: string.isRequired,
-        download_location: string.isRequired
-      }).isRequired
+        download_location: string.isRequired,
+      }).isRequired,
     }),
-    downloadPhoto: func.isRequired
+    downloadPhoto: func.isRequired,
   };
 
   state = { blob: null };
@@ -30,7 +30,7 @@ export default class DataTransferUploader extends React.Component {
   componentDidUpdate() {
     if (this.input && this.state.blob) {
       const dt = new DataTransfer();
-      dt.items.add(new File([this.state.blob], "image.jpg"));
+      dt.items.add(new File([this.state.blob], 'image.jpg'));
       this.input.files = dt.files;
     }
   }
