@@ -317,6 +317,7 @@ export default class UnsplashPicker extends React.Component {
             style={inputNoAppearanceStyle}
             className="f-1"
             ref={input => (this.searchInput = input)}
+            autoFocus={true}
           />
           {totalPhotosCount !== null && (
             <span style={{ color: inputDarkGray }}>
