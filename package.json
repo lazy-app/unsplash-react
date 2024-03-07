@@ -1,5 +1,5 @@
 {
-  "name": "@castrocrea/unsplash-react",
+  "name": "@lazy-app/unsplash-react",
   "version": "0.1.22",
   "license": "MIT",
   "main": "dist/index.js",
